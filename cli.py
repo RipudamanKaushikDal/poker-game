@@ -17,6 +17,9 @@ class CLI():
             f"Sorry! {card} is not a valid card, please choose from one of the cards shown above")
         print("Please Try Again!")
 
+    def input_wildcard_error(self) -> None:
+        print("Sorry! Can't use '*' with four Aces, no five-of-a-kind allowed ")
+
     def welcome_text(self) -> None:
         print('\n', '\t', "======",
               "Hi! Welcome to Poker Game", "======", '\t', '\n')
@@ -35,7 +38,7 @@ class CLI():
         while True:
 
             print('\n', "Please choose from one of the values below", "\n",
-                  list(CARD_RANKS.keys())+['*'], '\n')
+                  list(CARD_RANKS.keys()), '\n')
             user_cards = input(f"\n {player_name}'s hand:")
             hand = Hand(hand=user_cards)
 
