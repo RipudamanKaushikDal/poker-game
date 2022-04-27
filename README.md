@@ -15,4 +15,4 @@ This program was written in Python v3.8 and requires no external modules
 
 - **main.py** - This is the entrypoint to the game, you can run it by running main.py
 
-- **test.py** - This is the entrypoint for the unit tests, you can run the tests by running tests.py
+- **tests.py** - This is the entrypoint for the unit tests, you can run the tests by running tests.py
