@@ -49,9 +49,75 @@ class ClassifyWildCards(unittest.TestCase):
 class CompareHands(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.player1 = "tester1"
-        self.player2 = "tester2"
+        self.player1_name = "tester1"
+        self.player2_name = "tester2"
+
+    def test_toak_vs_fh(self) -> None:
+        hand1, hand2 = "AAAKT", "22233"
+        hand1_type, hand2_type = "THREE_OF_KIND", "FULL_HOUSE"
+        player1 = Player(name=self.player1_name,
+                         hand=hand1, hand_type=hand1_type)
+        player2 = Player(name=self.player2_name,
+                         hand=hand2, hand_type=hand2_type)
+        rules = Rules(player1=player1, player2=player2)
+        winner = rules.decide()
+        self.assertEqual(winner, player2)
+
+    def test_straights(self) -> None:
+        hand1, hand2 = "23456", "A2345"
+        hand1_type = hand2_type = "STRAIGHT"
+        player1 = Player(name=self.player1_name,
+                         hand=hand1, hand_type=hand1_type)
+        player2 = Player(name=self.player2_name,
+                         hand=hand2, hand_type=hand2_type)
+        rules = Rules(player1=player1, player2=player2)
+        winner = rules.decide()
+        self.assertEqual(winner, player1)
+
+    def test_two_pairs(self) -> None:
+        hand1, hand2 = "AA993", "AA88K"
+        hand1_type = hand2_type = "TWO_PAIR"
+        player1 = Player(name=self.player1_name,
+                         hand=hand1, hand_type=hand1_type)
+        player2 = Player(name=self.player2_name,
+                         hand=hand2, hand_type=hand2_type)
+        rules = Rules(player1=player1, player2=player2)
+        winner = rules.decide()
+        self.assertEqual(winner, player1)
+
+    def test_full_houses(self) -> None:
+        hand1, hand2 = "AAA22", "KKKQQ"
+        hand1_type = hand2_type = "FULL_HOUSE"
+        player1 = Player(name=self.player1_name,
+                         hand=hand1, hand_type=hand1_type)
+        player2 = Player(name=self.player2_name,
+                         hand=hand2, hand_type=hand2_type)
+        rules = Rules(player1=player1, player2=player2)
+        winner = rules.decide()
+        self.assertEqual(winner, player1)
+
+    def test_value_comparison(self) -> None:
+        hand1, hand2 = "AA234", "AA235"
+        hand1_type = hand2_type = "PAIR"
+        player1 = Player(name=self.player1_name,
+                         hand=hand1, hand_type=hand1_type)
+        player2 = Player(name=self.player2_name,
+                         hand=hand2, hand_type=hand2_type)
+        rules = Rules(player1=player1, player2=player2)
+        winner = rules.decide()
+        self.assertEqual(winner, player2)
+
+    def test_draw(self) -> None:
+        hand1, hand2 = "KKKKA", "KKKKA"
+        hand1_type = hand2_type = "FOUR_OF_KIND"
+        player1 = Player(name=self.player1_name,
+                         hand=hand1, hand_type=hand1_type)
+        player2 = Player(name=self.player2_name,
+                         hand=hand2, hand_type=hand2_type)
+        rules = Rules(player1=player1, player2=player2)
+        winner = rules.decide()
+        self.assertIsNone(winner)
 
 
 if __name__ == '__main__':
-    unittest.main(verbosity=2)
+    unittest.main(verbosity=1)

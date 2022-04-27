@@ -143,4 +143,5 @@ class Hand():
         if reconstructed_hand:
             self.hand = reconstructed_hand
         hand_type = self.__detect_hand()
+
         return hand_type

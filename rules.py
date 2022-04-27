@@ -16,26 +16,19 @@ class Rules():
     """
 
     def __sort_by_value(self, *, hand: str) -> List[int]:
-
         unique_cards = set(hand)
-
-        for i in range(len(unique_cards)):
-            unique_cards[i] = CARD_RANKS[unique_cards[i]]
-
-        return sorted(unique_cards)
+        ranks = [CARD_RANKS[card] for card in unique_cards]
+        return sorted(ranks, reverse=True)
 
     def __sort_by_frequency(self, *, hand: str) -> List[int]:
         unique_cards = Counter(hand)
         sorted_unique_cards = unique_cards.most_common()
-        ranks = []
-
-        for card, _ in sorted_unique_cards:
-            ranks.append(CARD_RANKS[card])
-
+        ranks = [CARD_RANKS[card] for card, _ in sorted_unique_cards]
         return ranks
 
     def __sort_straight_ranks(self, *, hand: str) -> List[int]:
-        if hand == "A2345":
+
+        if set(hand) == {"A", "2", "3", "4", "5"}:
             return [5, 4, 3, 2, 1]
 
         return self.__sort_by_value(hand=hand)
@@ -47,7 +40,7 @@ class Rules():
     def __compare_ranks(self, *, list1: List[int], list2: List[int]) -> Optional[Player]:
         if list1 > list2:
             return self.player1
-        elif list2 < list1:
+        elif list2 > list1:
             return self.player2
         else:
             return None

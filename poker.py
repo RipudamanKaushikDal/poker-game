@@ -10,6 +10,10 @@ class Poker:
         self.cli = CLI()
         self.cli.welcome_text()
 
+    """
+        Private Helper Methods
+    """
+
     def __get_player(self) -> Player:
         name = self.cli.get_player_name()
 
@@ -23,6 +27,10 @@ class Poker:
         hand_type = player_hand.classify()
         player = Player(name=name, hand=hand, hand_type=hand_type)
         return player
+
+    """
+        Public Main Methods
+    """
 
     def play(self):
         player1 = self.__get_player()

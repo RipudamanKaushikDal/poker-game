@@ -6,6 +6,10 @@ from player import Player
 
 class CLI():
 
+    """
+        Public Main Methods
+    """
+
     def input_length_error(self, *, length: int) -> None:
         print(
             f"Sorry! {length} is not a valid number of cards, you need 5 cards to play this game")
