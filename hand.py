@@ -16,55 +16,28 @@ class Hand():
         Private Helper Mehods
     """
 
-# Check Wildcard
-    def __tackle_wildcard(self) -> None:
-        if '*' not in self.hand:
-            return
-
-        hand_list = self.hand.split()
-        wild_card_index = hand_list.index('*')
-        unique_ranks = {CARD_RANKS[card] for card in self.hand}
-
-        if len(unique_ranks) != self.max_hand_length:
-            hand_list[wild_card_index] = 'A'
-        else:
-            unique_ranks.remove(1)
-            wild_card_value = self.__get_wildcard_for_straights(unique_ranks=unique_ranks)
-            wild_card = self.__card_reverse_lookup(card_rank=wild_card_value)
-            hand_list[wild_card_index] = wild_card
-
-        self.hand = "".join(hand_list)
-
-
-
-    def __card_reverse_lookup(self,*,card_rank:int) -> str:
+    def __card_reverse_lookup(self, *, card_rank: int) -> str:
         for card, rank in CARD_RANKS.items():
             if card_rank == rank:
                 return card
 
-            
-
-    def __get_wildcard_for_straights(self,*,unique_ranks:set) -> int:
-        max_rank = max(unique_ranks)  
+    def __get_wildcard_for_straights(self, *, unique_ranks: set) -> int:
+        max_rank = max(unique_ranks)
         min_rank = min(unique_ranks)
 
         if max_rank - min_rank == 4:
-            range_set = {rank for rank in range(min_rank,max_rank+1)}
+            range_set = {rank for rank in range(min_rank, max_rank+1)}
             wild_value = list(range_set.difference(unique_ranks))[0]
             return wild_value
-    
-        
+
         elif max_rank - min_rank == 3 and max_rank == CARD_RANKS['A']:
             return min_rank - 1
-    
 
         elif max_rank - min_rank == 3:
             return max_rank + 1
 
         else:
             return CARD_RANKS['A']
-
-
 
     def __check_two_unique(self, *, freq: int) -> str:
         if freq == 4:
@@ -115,18 +88,22 @@ class Hand():
 
         return hand_type
 
-
     """
         Public Main Methods
     """
 
     def is_valid(self) -> bool:
         hand_length = len(self.hand)
+
         if hand_length != self.max_hand_length:
             self.printer.input_length_error(length=hand_length)
             return False
 
         card_count = Counter(self.hand)
+
+        if len(card_count) == 1:
+            self.printer.input_same_card()
+            return False
 
         for card in self.hand:
 
@@ -140,7 +117,30 @@ class Hand():
 
         return True
 
+     # Check Wildcard
+    def classify_wildcard(self) -> Optional[str]:
+        if '*' not in self.hand:
+            return
+
+        hand_list = [char for char in self.hand]
+        wild_card_index = hand_list.index('*')
+        unique_ranks = {CARD_RANKS[card] for card in self.hand}
+
+        if len(unique_ranks) != self.max_hand_length:
+            hand_list[wild_card_index] = 'A'
+        else:
+            unique_ranks.remove(1)
+            wild_card_value = self.__get_wildcard_for_straights(
+                unique_ranks=unique_ranks)
+            wild_card = self.__card_reverse_lookup(card_rank=wild_card_value)
+            hand_list[wild_card_index] = wild_card
+
+        reconstructed_hand = "".join(hand_list)
+        return reconstructed_hand
+
     def classify(self) -> Optional[str]:
-        self.__tackle_wildcard()
+        reconstructed_hand = self.classify_wildcard()
+        if reconstructed_hand:
+            self.hand = reconstructed_hand
         hand_type = self.__detect_hand()
         return hand_type

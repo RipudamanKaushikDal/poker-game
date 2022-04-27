@@ -1,7 +1,6 @@
 
 from typing import Optional
 from game_info import CARD_RANKS
-from hand import Hand
 from player import Player
 
 
@@ -18,7 +17,12 @@ class CLI():
         print("Please Try Again!")
 
     def input_wildcard_error(self) -> None:
-        print("Sorry! Can't use '*' with four Aces, no five-of-a-kind allowed ")
+        print("Sorry! Can't use '*' with four Aces!")
+        self.input_same_card()
+
+    def input_same_card(self) -> None:
+        print(
+            "Sorry! You need atleast one card of different kind, no five-of-a-kind allowed!")
 
     def welcome_text(self) -> None:
         print('\n', '\t', "======",
@@ -27,7 +31,7 @@ class CLI():
     def get_player_name(self) -> str:
 
         player_name = input(
-            "\n Hi Player1! Please input your name (default:Player):")
+            "\n Hi there! Please input your name (default:Player):")
 
         if player_name.strip() == "":
             return "Player"
@@ -35,25 +39,22 @@ class CLI():
         return player_name.strip()
 
     def get_player_hand(self, *, player_name: str) -> str:
-        while True:
 
-            print('\n', "Please choose from one of the values below", "\n",
-                  list(CARD_RANKS.keys()), '\n')
-            user_cards = input(f"\n {player_name}'s hand:")
-            hand = Hand(hand=user_cards)
-
-            if hand.is_valid():
-                break
+        print('\n', "Please choose from one of the values below", "\n",
+              list(CARD_RANKS.keys()), '\n')
+        user_cards = input(f"\n {player_name}'s hand:")
 
         return user_cards.strip()
 
-    def print_result(self, *, winner: Optional[Player]) -> None:
-        if not winner:
-            print("Let's Call it a draw! You both are winners in our eyes")
-            return
+    def print_draw(self, *, hand_type: str) -> None:
+        print('\n', f"Looks like you both got {hand_type}s")
+        print('\n', "Let's Call it a draw! You both are winners in our eyes :)")
 
+    def print_winner(self, *, winner: Player) -> None:
         print(
             '\n', f"It was a close game, but '{winner.name}' wins this game with his '{winner.hand_type}' ")
         print('\n', "Let's give him a big hand ;)")
+
+    def farewell_text(self) -> None:
         print('\n', '\t', "======",
                     "Bye! See you next time", "======", '\t', '\n')
